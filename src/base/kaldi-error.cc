@@ -207,7 +207,7 @@ void MessageLogger::LogMessage() const {
       full_message << "WARNING (";
       break;
     case LogMessageEnvelope::kAssertFailed:
-      if (g_abort_on_assert_failure) { std::abort() } // PyKaldi change
+      if (g_abort_on_assert_failure) { std::abort(); } // PyKaldi change
 
       full_message << "ASSERTION_FAILED (";
       break;
