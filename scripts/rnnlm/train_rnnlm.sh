@@ -35,7 +35,7 @@ num_egs_threads=10  # number of threads used for sampling, if we're using
                     # time, will be however many is needed to balance the
                     # sampling and the actual training, this is just the maximum
                     # possible number that are allowed to run
-use_gpu=true  # use GPU for training
+use_gpu=yes  # use GPU for training
 use_gpu_for_diagnostics=false  # set true to use GPU for compute_prob_*.log
 
 # optional cleanup options
@@ -187,8 +187,12 @@ while [ $x -lt $num_iters ]; do
         else
           sparse_opt=''; embedding_type=word
         fi
-        if $use_gpu; then gpu_opt="--use-gpu=yes"; queue_gpu_opt="--gpu 1";
-        else gpu_opt="--use-gpu=no"; queue_gpu_opt=""; fi
+        gpu_opt="--use-gpu=$use_gpu"
+        if [ $use_gpu == "yes" ] || [ $use_gpu == "true" ] || [ $use_gpu == "wait" ]; then
+          queue_gpu_opt="--gpu 1";
+        else
+          queue_gpu_opt="";
+        fi
         if [ $this_num_jobs -gt 1 ]; then dest_number=$[x+1].$n
         else dest_number=$[x+1]; fi
         # in the normal case $repeated data will be just one copy.
@@ -213,7 +217,7 @@ while [ $x -lt $num_iters ]; do
              --read-rnnlm="$src_rnnlm" --write-rnnlm=$dir/$dest_number.raw \
              --read-embedding=$dir/${embedding_type}_embedding.$x.mat \
              --write-embedding=$dir/${embedding_type}_embedding.$dest_number.mat \
-             "ark,bg:cat $repeated_data | rnnlm-get-egs --srand=$num_splits_processed $train_egs_args - ark:- |" || touch $dir/.train_error &
+             "ark,bg:cat $repeated_data | rnnlm-get-egs --chunk-length=$chunk_length --srand=$num_splits_processed $train_egs_args - ark:- |" || touch $dir/.train_error &
       done
       wait # wait for just the training jobs.
       [ -f $dir/.train_error ] && \
@@ -226,6 +230,8 @@ while [ $x -lt $num_iters ]; do
         run.pl $dir/log/average.$[x+1].log \
           nnet3-average $src_models $dir/$[x+1].raw '&&' \
           matrix-sum --average=true $src_matrices $dir/${embedding_type}_embedding.$[x+1].mat
+        rm $src_models
+        rm $src_matrices
       fi
       # optionally, perform cleanup after training
       if [ "$cleanup" = true ] ; then
