@@ -155,13 +155,15 @@ class GrammarFstTpl {
   /// can copy it without causing the stored FSTs to be copied.
   GrammarFstTpl(const GrammarFstTpl<FST> &other) = default;
 
-  GrammarFst(
+  // Git merged this incorrectly, because it got renamed
+
+  /*GrammarFst(
       const ConstFst<StdArc> &top_fst,
       const std::vector<std::pair<int32, ConstFst<StdArc> *>> &ifsts,
       int32 nonterm_phones_offset)
       : GrammarFst(nonterm_phones_offset, top_fst,
                    reinterpret_cast<const std::vector<
-                       std::pair<int32, const ConstFst<StdArc> *>> &>(ifsts)) {}
+                       std::pair<int32, const ConstFst<StdArc> *>> &>(ifsts)) {}*/
 
   ///  This constructor should only be used prior to calling Read().
   GrammarFstTpl() { }
