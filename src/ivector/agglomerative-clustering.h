@@ -56,21 +56,12 @@ class AgglomerativeClusterer {
  public:
   AgglomerativeClusterer(
       const Matrix<BaseFloat> &costs,
-/*<<<<<<< HEAD
-      BaseFloat thresh,
-      int32 min_clust)
-      : count_(0), costs_(costs), thresh_(thresh), min_clust_(min_clust) {
-    num_clusters_ = costs.NumRows();
-=======*/
       BaseFloat threshold,
       int32 min_clusters,
       int32 first_pass_max_points,
-      BaseFloat max_cluster_fraction,
-      std::vector<int32> *assignments_out)
+      BaseFloat max_cluster_fraction)
       : costs_(costs), threshold_(threshold), min_clusters_(min_clusters),
-        first_pass_max_points_(first_pass_max_points),
-        assignments_(assignments_out) {
-//>>>>>>> upstream/master
+        first_pass_max_points_(first_pass_max_points) {
     num_points_ = costs.NumRows();
 
     // The max_cluster_size_ is a hard limit on the number points in a cluster.
@@ -91,12 +82,8 @@ class AgglomerativeClusterer {
     second_pass_count_ = 0;
   }
 
-/*<<<<<<< HEAD
-  // Performs the clustering
-  void Cluster(std::vector<int32> *assignments);
-=======*/
   // Clusters points. Chooses single pass or two pass algorithm.
-  void Cluster();
+  void Cluster(std::vector<int32> *assignments);
 
   // Clusters points using single pass algorithm.
   void ClusterSinglePass();
@@ -104,7 +91,6 @@ class AgglomerativeClusterer {
   // Clusters points using two pass algorithm.
   void ClusterTwoPass();
 
-//>>>>>>> upstream/master
  private:
   // Encodes cluster pair into a 32bit unsigned integer.
   uint32 EncodePair(int32 i, int32 j);
@@ -122,15 +108,10 @@ class AgglomerativeClusterer {
   void MergeClusters(int32 i, int32 j);
 
   const Matrix<BaseFloat> &costs_;  // cost matrix
-/*<<<<<<< HEAD
-  BaseFloat thresh_;  // stopping criterion threshold
-  int32 min_clust_;  // minimum number of clusters
-=======*/
   BaseFloat threshold_;  // stopping criterion threshold
   int32 min_clusters_;  // minimum number of clusters
   int32 first_pass_max_points_;  // maximum number of points in each subset
   std::vector<int32> *assignments_;  // assignments out
-//>>>>>>> upstream/master
 
   int32 num_points_;  // total number of points to cluster
   int32 max_cluster_size_;  // maximum number of points in a cluster
@@ -196,17 +177,11 @@ class AgglomerativeClusterer {
  */
 void AgglomerativeCluster(
     const Matrix<BaseFloat> &costs,
-/*<<<<<<< HEAD
-    BaseFloat thresh,
-    int32 min_clust,
-    std::vector<int32> *assignments);
-=======*/
     BaseFloat threshold,
     int32 min_clusters,
     int32 first_pass_max_points,
     BaseFloat max_cluster_fraction,
     std::vector<int32> *assignments_out);
-//>>>>>>> upstream/master
 
 }  // end namespace kaldi.
 

@@ -24,41 +24,8 @@
 
 namespace kaldi {
 
-/*<<<<<<< HEAD this was in the pykaldi branch
 void AgglomerativeClusterer::Cluster(std::vector<int32> *assignments) {
-  KALDI_VLOG(2) << "Initializing cluster assignments.";
-  Initialize();
-
-  KALDI_VLOG(2) << "Clustering...";
-  // This is the main algorithm loop. It moves through the queue merging
-  // clusters until a stopping criterion has been reached.
-  while (num_clusters_ > min_clust_ && !queue_.empty()) {
-    std::pair<BaseFloat, std::pair<uint16, uint16> > pr = queue_.top();
-    int32 i = (int32) pr.second.first, j = (int32) pr.second.second;
-    queue_.pop();
-    // check to make sure clusters have not already been merged
-    if ((active_clusters_.find(i) != active_clusters_.end()) &&
-        (active_clusters_.find(j) != active_clusters_.end()))
-      MergeClusters(i, j);
-  }
-
-  assignments->resize(num_points_);
-  int32 label_id = 0;
-  std::set<int32>::iterator it;
-  // Iterate through the clusters and assign all utterances within the cluster
-  // an ID label unique to the cluster. This is the final output and frees up
-  // the cluster memory accordingly.
-  for (it = active_clusters_.begin(); it != active_clusters_.end(); ++it) {
-    ++label_id;
-    AhcCluster *cluster = clusters_map_[*it];
-    std::vector<int32>::iterator utt_it;
-    for (utt_it = cluster->utt_ids.begin();
-         utt_it != cluster->utt_ids.end(); ++utt_it)
-      (*assignments)[*utt_it] = label_id;
-    delete cluster;
-  }
-=======*/
-void AgglomerativeClusterer::Cluster() {
+  assignments_ = assignments;
   if (num_points_ > first_pass_max_points_)
     ClusterTwoPass();
   else
@@ -100,7 +67,6 @@ void AgglomerativeClusterer::ClusterTwoPass() {
   ComputeClusters(min_clusters_);
 
   AssignClusters();
-/*>>>>>>> upstream/master*/
 }
 
 uint32 AgglomerativeClusterer::EncodePair(int32 i, int32 j) {
@@ -257,14 +223,6 @@ void AgglomerativeClusterer::AssignClusters() {
 
 void AgglomerativeCluster(
     const Matrix<BaseFloat> &costs,
-/*<<<<<<< HEAD
-    BaseFloat thresh,
-    int32 min_clust,
-    std::vector<int32> *assignments) {
-  KALDI_ASSERT(min_clust >= 0);
-  AgglomerativeClusterer ac(costs, thresh, min_clust);
-  ac.Cluster(assignments);
-=======*/
     BaseFloat threshold,
     int32 min_clusters,
     int32 first_pass_max_points,
@@ -273,10 +231,8 @@ void AgglomerativeCluster(
   KALDI_ASSERT(min_clusters >= 0);
   KALDI_ASSERT(max_cluster_fraction >= 1.0 / min_clusters);
   AgglomerativeClusterer ac(costs, threshold, min_clusters,
-                            first_pass_max_points, max_cluster_fraction,
-                            assignments_out);
-  ac.Cluster();
-//>>>>>>> upstream/master
+                            first_pass_max_points, max_cluster_fraction);
+  ac.Cluster(assignments_out);
 }
 
 }  // end namespace kaldi.
