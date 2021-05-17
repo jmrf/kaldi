@@ -1040,13 +1040,20 @@ void CopyToVectorFst(GrammarFstTpl<FST> *grammar_fst,
 // Instantiate the template for the instance fst types that are used in kaldi
 template class GrammarFstTpl<const ConstFst<StdArc> >;
 template class GrammarFstTpl<StdVectorFst>;
+/*PyKaldi:*/
+template class GrammarFstTpl<ConstFst<StdArc> >;
 
 template class ArcIterator<GrammarFstTpl<const ConstFst<StdArc> > >;
 template class ArcIterator<GrammarFstTpl<StdVectorFst> >;
+/*PyKaldi:*/
+template class ArcIterator<GrammarFstTpl<ConstFst<StdArc> > >;
 
 // Instantiate the function template for CopyToVectorFST
 template void CopyToVectorFst<const ConstFst<StdArc> >(GrammarFstTpl<const ConstFst<StdArc> > *grammar_fst,
                                                        VectorFst<StdArc> *vector_fst);
 template void CopyToVectorFst<StdVectorFst>(GrammarFstTpl<StdVectorFst> *grammar_fst,
+                                                       VectorFst<StdArc> *vector_fst);
+/*PyKaldi:*/
+template void CopyToVectorFst<ConstFst<StdArc> >(GrammarFstTpl<ConstFst<StdArc> > *grammar_fst,
                                                        VectorFst<StdArc> *vector_fst);
 } // end namespace fst
