@@ -656,6 +656,7 @@ void PrepareForGrammarFst(int32 nonterm_phones_offset,
 // Template aliases
 using ConstGrammarFst = GrammarFstTpl<const ConstFst<StdArc> >;
 using VectorGrammarFst =  GrammarFstTpl<StdVectorFst>;
+using GrammarFst = GrammarFstTpl<StdConstFst>;
 
 } // end namespace fst
 
