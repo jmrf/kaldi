@@ -155,4 +155,7 @@ template class LatticeIncrementalOnlineDecoderTpl<fst::ConstFst<fst::StdArc> >;
 template class LatticeIncrementalOnlineDecoderTpl<fst::ConstGrammarFst >;
 template class LatticeIncrementalOnlineDecoderTpl<fst::VectorGrammarFst >;
 
+/*pykaldi*/
+template class LatticeIncrementalOnlineDecoderTpl<fst::GrammarFst >;
+
 } // end namespace kaldi.
