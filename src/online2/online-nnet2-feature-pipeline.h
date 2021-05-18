@@ -279,6 +279,13 @@ class OnlineNnet2FeaturePipeline: public OnlineFeatureInterface {
     return ivector_feature_;
   }
 
+  // Benjamin: pyclif was having issues with the overlaoded const below I assume,
+  // something about a deleted function, so I created this function just for pykaldi
+  // Its identical to OnlineIvectorFeature *IvectorFeature() and makes pyclif happy
+  OnlineIvectorFeature *IvectorFeaturePyKaldi() {
+    return ivector_feature_;
+  }
+
   /// A const accessor for the iVector extractor. Returns NULL if iVectors are
   /// not being used.
   const OnlineIvectorFeature *IvectorFeature() const {
