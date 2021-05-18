@@ -593,6 +593,12 @@ void OnlineSilenceWeighting::ComputeCurrentTraceback<fst::VectorGrammarFst >(
     const LatticeFasterOnlineDecoderTpl<fst::VectorGrammarFst > &decoder,
     bool use_final_probs);
 
+/*pykaldi*/
+template
+void OnlineSilenceWeighting::ComputeCurrentTraceback<fst::GrammarFst >(
+    const LatticeFasterOnlineDecoderTpl<fst::GrammarFst > &decoder,
+    bool use_final_probs);
+
 template
 void OnlineSilenceWeighting::ComputeCurrentTraceback<fst::Fst<fst::StdArc> >(
     const LatticeIncrementalOnlineDecoderTpl<fst::Fst<fst::StdArc> > &decoder,
@@ -606,6 +612,11 @@ void OnlineSilenceWeighting::ComputeCurrentTraceback<fst::VectorGrammarFst >(
     const LatticeIncrementalOnlineDecoderTpl<fst::VectorGrammarFst > &decoder,
     bool use_final_probs);
 
+/*pykaldi*/
+template
+void OnlineSilenceWeighting::ComputeCurrentTraceback<fst::GrammarFst >(
+    const LatticeIncrementalOnlineDecoderTpl<fst::GrammarFst > &decoder,
+    bool use_final_probs);
 
 void OnlineSilenceWeighting::GetDeltaWeights(
     int32 num_frames_ready, int32 first_decoder_frame,

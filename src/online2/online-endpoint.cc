@@ -174,5 +174,22 @@ bool EndpointDetected<LatticeIncrementalOnlineDecoderTpl<fst::VectorGrammarFst >
     BaseFloat frame_shift_in_seconds,
     const LatticeIncrementalOnlineDecoderTpl<fst::VectorGrammarFst > &decoder);
 
+/*pykaldi*/
+
+template
+bool EndpointDetected<LatticeIncrementalOnlineDecoderTpl<fst::GrammarFst > >(
+    const OnlineEndpointConfig &config,
+    const TransitionModel &tmodel,
+    BaseFloat frame_shift_in_seconds,
+    const LatticeIncrementalOnlineDecoderTpl<fst::GrammarFst > &decoder);
+
+/*pykaldi*/
+
+template
+bool EndpointDetected<LatticeFasterOnlineDecoderTpl<fst::GrammarFst > >(
+    const OnlineEndpointConfig &config,
+    const TransitionModel &tmodel,
+    BaseFloat frame_shift_in_seconds,
+    const LatticeFasterOnlineDecoderTpl<fst::GrammarFst > &decoder);
 
 }  // namespace kaldi
