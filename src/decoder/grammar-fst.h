@@ -30,7 +30,7 @@
    OpenFst's Replace() function, but with support for left-biphone context.
  */
 
-
+#include <memory>
 
 #include "fst/fstlib.h"
 #include "fstext/grammar-context-fst.h"
@@ -145,10 +145,38 @@ class GrammarFstTpl {
               than once in 'fsts'.  ifsts may be empty, even though that doesn't
               make much sense.
     */
+
   GrammarFstTpl(
       int32 nonterm_phones_offset,
       std::shared_ptr<FST> top_fst,
       const std::vector<std::pair<int32, std::shared_ptr<FST> > > &ifsts);
+
+  #ifdef __APPLE__
+  /* Benjamin: The above constructure was problematic with PyClif when compiling on Mac, 
+   * but could be linked from PyClif without problems on Linux!
+   * On Mac, there seems to be problems with shared pointers as arguments.
+   * We use make shared to copy top_fst and turn it into a shared pointer<FST>
+   * Fixme: reinterpret_cast for ifsts, doesnt look safe
+   * Note that the argument order is changed to not interfere with the rest of Kaldi */
+  GrammarFstTpl(
+      FST top_fst,
+      const std::vector<std::pair<int32, FST > > &ifsts,
+      int32 nonterm_phones_offset) : 
+  GrammarFstTpl(
+      nonterm_phones_offset,
+      std::make_shared<FST>(top_fst),
+      reinterpret_cast<const std::vector<std::pair<int32, std::shared_ptr<FST> > > &>(ifsts)) {}
+  #else
+  //same argument order for non-apple case
+  GrammarFstTpl(
+      std::shared_ptr<FST> top_fst,
+      const std::vector<std::pair<int32, std::shared_ptr<FST> > > &ifsts,
+      int32 nonterm_phones_offset) :
+  GrammarFstTpl(
+      nonterm_phones_offset,
+      top_fst,
+      ifsts)
+  #endif
 
   /// Copy constructor.  Useful because this object is not thread safe so cannot
   /// be used by multiple parallel decoder threads, but it is lightweight and
