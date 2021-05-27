@@ -175,7 +175,7 @@ class GrammarFstTpl {
   GrammarFstTpl(
       nonterm_phones_offset,
       top_fst,
-      ifsts)
+      ifsts) {}
   #endif
 
   /// Copy constructor.  Useful because this object is not thread safe so cannot
