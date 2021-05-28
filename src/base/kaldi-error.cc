@@ -195,8 +195,7 @@ void MessageLogger::LogMessage() const {
   // Otherwise, use the default Kaldi logging.
   // Build the log-message header.
   std::stringstream full_message;
-  if (envelope_.severity > LogMessageEnvelope::kInfo ||
-        !g_print_stack_trace_on_error)  {
+  if (envelope_.severity > LogMessageEnvelope::kInfo) {
     full_message << "VLOG[" << envelope_.severity << "] (";
   } else {
     switch (envelope_.severity) {
@@ -207,8 +206,6 @@ void MessageLogger::LogMessage() const {
       full_message << "WARNING (";
       break;
     case LogMessageEnvelope::kAssertFailed:
-      if (g_abort_on_assert_failure) { std::abort(); } // PyKaldi change
-
       full_message << "ASSERTION_FAILED (";
       break;
     case LogMessageEnvelope::kError:
@@ -223,7 +220,8 @@ void MessageLogger::LogMessage() const {
                << envelope_.line << ") " << GetMessage().c_str();
 
   // Add stack trace for errors and assertion failures, if available.
-  if (envelope_.severity < LogMessageEnvelope::kWarning) {
+  if (envelope_.severity < LogMessageEnvelope::kWarning &&
+      g_print_stack_trace_on_error) {
     const std::string &stack_trace = KaldiGetStackTrace();
     if (!stack_trace.empty()) {
       full_message << "\n\n" << stack_trace;
@@ -242,8 +240,10 @@ void KaldiAssertFailure_(const char *func, const char *file, int32 line,
   MessageLogger::Log() =
       MessageLogger(LogMessageEnvelope::kAssertFailed, func, file, line)
       << "Assertion failed: (" << cond_str << ")";
-  fflush(NULL); // Flush all pending buffers, abort() may not flush stderr.
-  std::abort();
+  if (g_abort_on_assert_failure) {  // PyKaldi change
+    fflush(NULL); // Flush all pending buffers, abort() may not flush stderr.
+    std::abort();
+  }
 }
 
 /***** THIRD-PARTY LOG-HANDLER *****/

@@ -189,7 +189,7 @@ private:
 
 /***** KALDI ASSERTS *****/
 
-[[noreturn]] void KaldiAssertFailure_(const char *func, const char *file,
+void KaldiAssertFailure_(const char *func, const char *file,
                                       int32 line, const char *cond_str);
 
 // Note on KALDI_ASSERT and KALDI_PARANOID_ASSERT:
